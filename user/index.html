@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keyboard Trainer — Тренажёр</title>
+  <link rel="stylesheet" href="/public/common.css" />
+  <link rel="stylesheet" href="user.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- Screen 1: login -->
+    <section id="screen-login" class="screen">
+      <div class="card login-card">
+        <h1>⌨️ Keyboard Trainer</h1>
+        <p class="muted">Вход для ученика: придумайте псевдоним и введите персональный код.</p>
+        <label class="field">
+          <span>Псевдоним</span>
+          <input id="login-alias" type="text" maxlength="24" placeholder="Никнейм (Имя)" autocomplete="off" />
+        </label>
+        <label class="field">
+          <span>Код доступа</span>
+          <input id="login-code" type="text" maxlength="32" placeholder="Придумай свой или введи существующий" autocomplete="off" />
+        </label>
+        <button id="login-btn" class="btn">Войти</button>
+        <div id="login-error" class="error"></div>
+      </div>
+    </section>
+
+    <!-- Screen 2: text selection -->
+    <section id="screen-texts" class="screen hidden">
+      <header class="topbar">
+        <div>
+          <h2>Выберите текст</h2>
+          <p class="muted">Вы вошли как <b id="texts-alias"></b></p>
+        </div>
+        <button id="logout-btn" class="btn secondary">Выйти</button>
+      </header>
+
+      <div id="round-bar" class="round-bar hidden">
+        <div class="round-live">● СЕССИЯ АКТИВНА</div>
+        <div class="round-stat">
+          <b id="round-total">0</b>
+          <span>символов всего</span>
+        </div>
+        <div class="round-stat">
+          <b id="round-my-share">0%</b>
+          <span>мой вклад</span>
+        </div>
+      </div>
+
+      <div id="texts-list" class="texts-grid"></div>
+    </section>
+
+    <!-- Screen 3: trainer -->
+    <section id="screen-trainer" class="screen hidden">
+      <header class="topbar">
+        <button id="back-btn" class="btn secondary">← К текстам</button>
+        <div class="live-stats">
+          <div class="stat"><b id="stat-cpm">0</b><span>симв/мин</span></div>
+          <div class="stat"><b id="stat-accuracy">100%</b><span>точность</span></div>
+          <div class="stat"><b id="stat-errors">0</b><span>ошибки</span></div>
+        </div>
+        <button id="stop-btn" class="btn danger">Стоп</button>
+      </header>
+
+      <div id="trainer-round" class="round-bar hidden">
+        <div class="round-live">● СЕССИЯ АКТИВНА</div>
+        <div class="round-stat"><b id="trainer-round-total">0</b><span>символов всего</span></div>
+        <div class="round-stat"><b id="trainer-round-share">0%</b><span>мой вклад</span></div>
+      </div>
+
+      <div class="card trainer-card">
+        <div id="target-text" class="target-text"></div>
+        <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+        <p class="hint muted">Печатайте текст выше. Клавиша Enter — новая строка. Ошибки подсвечиваются красным.</p>
+        <div id="focus-hint" class="focus-hint hidden">⏸ Нажмите сюда, чтобы продолжить</div>
+      </div>
+    </section>
+
+    <!-- Screen 4: result -->
+    <section id="screen-result" class="screen hidden">
+      <div class="card result-card">
+        <h1>Результат 🎉</h1>
+        <div class="result-grid">
+          <div class="result-item"><b id="result-cpm">0</b><span>симв/мин</span></div>
+          <div class="result-item"><b id="result-accuracy">0%</b><span>точность</span></div>
+          <div class="result-item"><b id="result-chars">0</b><span>символов</span></div>
+          <div class="result-item"><b id="result-time">0с</b><span>время</span></div>
+        </div>
+        <div class="result-actions">
+          <button id="again-btn" class="btn">Ещё раз</button>
+          <button id="to-texts-btn" class="btn secondary">К текстам</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="/vendor/socket.io.min.js"></script>
+  <script src="/public/common.js"></script>
+  <script src="user.js"></script>
+</body>
+</html>

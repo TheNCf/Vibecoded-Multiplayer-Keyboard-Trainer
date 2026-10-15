@@ -1,0 +1,24 @@
+{
+  "name": "keyboard-trainer",
+  "version": "1.0.0",
+  "description": "Local network keyboard training system with admin and user interfaces",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js",
+    "seed": "node database/seed.js",
+    "docker:up": "sh scripts/docker-up.sh",
+    "docker:down": "docker compose down"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.0",
+    "nanoid": "^3.3.8",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

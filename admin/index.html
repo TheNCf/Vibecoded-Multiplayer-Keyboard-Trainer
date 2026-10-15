@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keyboard Trainer — Админ</title>
+  <link rel="stylesheet" href="/public/common.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- Screen 1: login -->
+    <section id="screen-login" class="screen">
+      <div class="card login-card">
+        <h1>🛡 Панель преподавателя</h1>
+        <p class="muted">Введите пароль администратора.</p>
+        <label class="field">
+          <span>Пароль</span>
+          <input id="admin-password" type="password" placeholder="пароль из .env" autocomplete="off" />
+        </label>
+        <button id="admin-login-btn" class="btn">Войти</button>
+        <div id="admin-login-error" class="error"></div>
+      </div>
+    </section>
+
+    <!-- Screen 2: dashboard -->
+    <section id="screen-dashboard" class="screen hidden">
+      <header class="topbar">
+        <h2>📊 Дашборд</h2>
+        <nav class="nav">
+          <button id="nav-dashboard" class="btn secondary active">Дашборд</button>
+          <button id="nav-archive" class="btn secondary">Архив сессий</button>
+          <button id="nav-texts" class="btn secondary">Тексты</button>
+          <button id="nav-settings" class="btn secondary">Настройки</button>
+          <button id="admin-logout-btn" class="btn secondary">Выйти</button>
+        </nav>
+      </header>
+
+      <!-- Kahoot screen: big counter + popups + live table -->
+      <div class="kahoot">
+        <div id="popup-layer" class="popup-layer"></div>
+
+        <div class="counter-card card">
+          <div class="counter-label">Символов за сессию</div>
+          <div id="total-chars" class="counter-value">0</div>
+          <div class="round-controls">
+            <button id="start-round-btn" class="btn success">▶ Начать сессию</button>
+            <button id="finish-round-btn" class="btn danger" disabled>■ Завершить</button>
+            <div id="round-status" class="round-status muted">Сессия не запущена</div>
+          </div>
+        </div>
+
+        <div id="participants-card" class="card table-card">
+          <h3>Участники (в реальном времени)</h3>
+          <table class="live-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Псевдоним</th>
+                <th>Символы</th>
+                <th>Вклад</th>
+                <th>симв/мин</th>
+                <th>Точность</th>
+              </tr>
+            </thead>
+            <tbody id="participants-body">
+              <tr><td colspan="6" class="muted">Пока никто не печатает…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="stats-grid">
+        <div class="card stat-card"><b id="stat-students">0</b><span>учеников</span></div>
+        <div class="card stat-card"><b id="stat-rounds">0</b><span>сессий проведено</span></div>
+        <div class="card stat-card"><b id="stat-chars">0</b><span>символов всего</span></div>
+        <div class="card stat-card"><b id="stat-cpm">0</b><span>средняя скорость (симв/мин)</span></div>
+        <div class="card stat-card"><b id="stat-accuracy">0%</b><span>средняя точность</span></div>
+      </div>
+    </section>
+
+    <!-- Screen 3: archive -->
+    <section id="screen-archive" class="screen hidden">
+      <header class="topbar">
+        <h2>🗂 Архив сессий</h2>
+        <nav class="nav">
+          <button id="archive-back-btn" class="btn secondary">← Дашборд</button>
+          <button id="archive-texts-btn" class="btn secondary">Тексты</button>
+        </nav>
+      </header>
+      <div class="card">
+        <table class="live-table">
+          <thead>
+            <tr>
+              <th>Подпись</th>
+              <th>Дата</th>
+              <th>Символов</th>
+              <th>Участников</th>
+              <th>Ср. симв/мин</th>
+              <th>Ср. точность</th>
+            </tr>
+          </thead>
+          <tbody id="archive-body">
+            <tr><td colspan="6" class="muted">Загрузка…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Screen 4: texts management -->
+    <section id="screen-texts" class="screen hidden">
+      <header class="topbar">
+        <h2>📝 Тексты для печати</h2>
+        <nav class="nav">
+          <button id="texts-back-btn" class="btn secondary">← Дашборд</button>
+          <button id="texts-archive-btn" class="btn secondary">Архив сессий</button>
+          <button id="texts-new-btn" class="btn success">+ Добавить текст</button>
+        </nav>
+      </header>
+      <div class="card">
+        <table class="live-table">
+          <thead>
+            <tr>
+              <th>Заголовок</th>
+              <th>Язык</th>
+              <th>Уровень</th>
+              <th>Текст</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="texts-body">
+            <tr><td colspan="5" class="muted">Загрузка…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Screen 5: settings -->
+    <section id="screen-settings" class="screen hidden">
+      <header class="topbar">
+        <h2>⚙ Настройки</h2>
+        <nav class="nav">
+          <button id="settings-back-btn" class="btn secondary">← Дашборд</button>
+        </nav>
+      </header>
+      <div class="card settings-card">
+        <label class="switch-row">
+          <span class="switch-text">
+            <b>Показывать таблицу участников</b>
+            <small class="muted">Индивидуальная статистика учеников (псевдонимы, скорость, вклад, точность) на дашборде.</small>
+          </span>
+          <input id="show-individual" type="checkbox" class="switch" />
+        </label>
+      </div>
+    </section>
+
+    <!-- Finish modal: session label -->
+    <div id="finish-modal" class="modal hidden">
+      <div class="card modal-card">
+        <h3>Подпись сессии</h3>
+        <p class="muted">Например: «2Б, урок 3». Подпись обязательна — по ней сессия попадёт в архив.</p>
+        <label class="field">
+          <span>Название</span>
+          <input id="finish-label" type="text" maxlength="60" placeholder="2Б, урок 3" />
+        </label>
+        <div class="modal-actions">
+          <button id="finish-cancel-btn" class="btn secondary">Отмена</button>
+          <button id="finish-confirm-btn" class="btn success">Сохранить и завершить</button>
+        </div>
+        <div id="finish-error" class="error"></div>
+      </div>
+    </div>
+
+    <!-- Text edit modal -->
+    <div id="text-modal" class="modal hidden">
+      <div class="card modal-card">
+        <h3 id="text-modal-title">Новый текст</h3>
+        <input id="text-id" type="hidden" />
+        <label class="field">
+          <span>Заголовок</span>
+          <input id="text-title" type="text" maxlength="80" placeholder="Например: Разминка" />
+        </label>
+        <div class="form-row">
+          <label class="field">
+            <span>Язык</span>
+            <select id="text-lang">
+              <option value="ru">Русский</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Уровень</span>
+            <select id="text-level">
+              <option value="easy">Лёгкий</option>
+              <option value="medium">Средний</option>
+              <option value="hard">Сложный</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Текст</span>
+          <textarea id="text-content" rows="5" placeholder="Введите текст для набора…"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button id="text-cancel-btn" class="btn secondary">Отмена</button>
+          <button id="text-save-btn" class="btn success">Сохранить</button>
+        </div>
+        <div id="text-error" class="error"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/vendor/socket.io.min.js"></script>
+  <script src="/public/common.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

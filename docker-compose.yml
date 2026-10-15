@@ -1,0 +1,25 @@
+services:
+  server:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      # Live-edit frontend without rebuilding the image
+      - ./user:/app/user:ro
+      - ./admin:/app/admin:ro
+      - ./public:/app/public:ro
+      # Server code + data: apply changes with `docker compose restart server`
+      - ./server:/app/server:ro
+      - ./database:/app/database:ro
+    extra_hosts:
+      # Lets the container reach MongoDB running on the host machine
+      - "host.docker.internal:host-gateway"
+    environment:
+      PORT: 3000
+      DB_URI: mongodb://host.docker.internal:27017/keyboard-trainer
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      JWT_SECRET: ${JWT_SECRET:-}
+      NETWORK_IP: ${NETWORK_IP:-localhost}
+      AUTO_SEED: "true"
+      SEED_DEMO_USER: ${SEED_DEMO_USER:-false}
