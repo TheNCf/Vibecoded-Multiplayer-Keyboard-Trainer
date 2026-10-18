@@ -77,6 +77,10 @@
         <p class="hint muted">Печатайте текст выше. Клавиша Enter — новая строка. Ошибки подсвечиваются красным.</p>
         <div id="focus-hint" class="focus-hint hidden">⏸ Нажмите сюда, чтобы продолжить</div>
       </div>
+      <div class="dock">
+        <div id="combo" class="combo hidden">Комбо x0</div>
+        <div id="keyboard" class="keyboard hidden" aria-hidden="true"></div>
+      </div>
     </section>
 
     <!-- Screen 4: result -->
@@ -89,6 +93,10 @@
           <div class="result-item"><b id="result-chars">0</b><span>символов</span></div>
           <div class="result-item"><b id="result-time">0с</b><span>время</span></div>
         </div>
+        <div id="result-achievements" class="result-achievements hidden">
+          <h3>Достижения <span id="result-ach-count" class="muted"></span></h3>
+          <div id="result-ach-list" class="ach-badges"></div>
+        </div>
         <div class="result-actions">
           <button id="again-btn" class="btn">Ещё раз</button>
           <button id="to-texts-btn" class="btn secondary">К текстам</button>
@@ -97,6 +105,8 @@
     </section>
 
   </div>
+
+  <div id="ach-toasts" class="ach-toasts" aria-live="polite"></div>
 
   <script src="/vendor/socket.io.min.js"></script>
   <script src="/public/common.js"></script>
